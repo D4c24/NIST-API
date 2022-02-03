@@ -1,6 +1,4 @@
-import requests
-import json
-import pandas
+import requests, json, pandas
 
 ### https://www.circl.lu/services/cve-search/
 ### https://cve.circl.lu/api/
@@ -11,10 +9,13 @@ def run():
     base_url = 'http://cve.circl.lu/api/query'
     ### become a reponse object into a string and save it in a dict.
     i = (requests.get(base_url, params=payload)).text
-    data = json.loads(i)
-    print(data.keys())
-
-    
+    data = json.loads(i)['results']
+    #print(data.keys())
+    cveID = [i['id'] for i in data]
+    cveSummary = [i['summary'] for i in data]
+    for cve, summary in zip(cveID, cveSummary):
+      print "\nCVE: ",cve
+      print "Summary: ",summary
 
 if __name__ == '__main__':
     run()
